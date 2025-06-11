@@ -17,15 +17,21 @@ public class EmailDAO implements IEmailDAO {
         try (Connection connection = DatabaseConnection.getInstance();
              PreparedStatement stmt = connection.prepareStatement(sql)){
 
+            long uid = email.getUid();
+            String subject = email.getSubject();
+            String sender = email.getSender();
+            String body = email.getBody();
+            String status = email.getStatus().replace("\\", "").replaceAll("\\s+", "");
+
             Timestamp date = new Timestamp(email.getDate().getTime());
 
-            stmt.setLong(1, email.getUid());
-            stmt.setString(2, email.getSubject());
-            stmt.setString(3, email.getSender());
+            stmt.setLong(1, uid);
+            stmt.setString(2, subject);
+            stmt.setString(3, sender);
             stmt.setTimestamp(4, date);
-            stmt.setString(5, email.getBody());
+            stmt.setString(5, body);
             stmt.setArray(6, connection.createArrayOf("text", email.getAttachmentPaths().toArray()));
-            stmt.setString(7, email.getStatus());
+            stmt.setString(7, status);
             stmt.executeUpdate();
 
         }catch (SQLException e){
@@ -42,14 +48,20 @@ public class EmailDAO implements IEmailDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Email email = new Email();
-                email.setUid(rs.getLong("uid"));
-                email.setSubject(rs.getString("subject"));
-                email.setSender(rs.getString("sender"));
-                email.setDate(rs.getTimestamp("date"));
-                email.setBody(rs.getString("body"));
-                email.setStatus(rs.getString("status"));
+                long uid = rs.getLong("uid");
+                String subject = rs.getString("subject");
+                String sender = rs.getString("sender");
+                Timestamp date = rs.getTimestamp("date");
+                String body = rs.getString("body");
+                String status = rs.getString("status");
 
+                Email email = new Email();
+                email.setUid(uid);
+                email.setSubject(subject);
+                email.setSender(sender);
+                email.setDate(date);
+                email.setBody(body);
+                email.setStatus(status);
 
                 Array sqlArray = rs.getArray("attachment_paths");
                 if (sqlArray != null) {
