@@ -17,19 +17,18 @@ public class EmailController {
     public EmailController() {
         emailLogin = new EmailLogin();
         emailService = new EmailService(emailLogin.imapHost, emailLogin.username, emailLogin.password);
-        emailView = new EmailView();
         emailSenderService = new EmailSenderService();
     }
 
     public List<Email> emails(String subjectFilter, String bodyFilter, String senderFilter) {
         List<Email> emails = emailService.fetchEmails(subjectFilter, bodyFilter, senderFilter);
-        emailView.displayEmails(emails);
+        System.out.println("Número de e-mails: " + emails.size());
         return emails;
     }
 
     public boolean sendEmail(String to, String subject, String body) {
         boolean success = emailSenderService.sendEmail(to, subject, body);
-        emailView.displaySendEmailStatus(success);
+        EmailView.displaySendEmailStatus(success);
         return success;
     }
 }

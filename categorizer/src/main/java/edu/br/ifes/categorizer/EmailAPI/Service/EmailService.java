@@ -98,6 +98,33 @@ public class EmailService {
         return "";
     }
 
+    private String getAvailableFileName(String directory, String originalName) {
+        File file = new File(directory + originalName);
+
+        if (!file.exists()) {
+            return originalName;
+        }
+
+        String name = originalName;
+        String extension = "";
+
+        int dotIndex = originalName.lastIndexOf(".");
+        if (dotIndex != -1) {
+            name = originalName.substring(0, dotIndex);
+            extension = originalName.substring(dotIndex);
+        }
+
+        int counter = 1;
+        while (true) {
+            String newName = String.format("%s(%d)%s", name, counter, extension);
+            file = new File(directory + newName);
+            if (!file.exists()) {
+                return newName;
+            }
+            counter++;
+        }
+    }
+
 
     private List<String> extractAttachments(MimeMultipart multipart) throws Exception {
         String outputDir = "/home/davidson/Desktop/Defesa-Mestrado-BPMN/Defesa-Mestrado-Camunda/anexos/";
@@ -107,7 +134,9 @@ public class EmailService {
             BodyPart part = multipart.getBodyPart(i);
 
             if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) && part.getFileName() != null) {
-                String fileName = part.getFileName();
+                String originalFileName = part.getFileName();
+                String fileName = getAvailableFileName(outputDir, originalFileName);
+
                 File file = new File(outputDir + fileName);
                 file.getParentFile().mkdirs();
 
@@ -131,6 +160,7 @@ public class EmailService {
 
         return savedFiles;
     }
+
 
     public static String limparHtml(String html) {
         if (html == null) return "";
