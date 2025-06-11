@@ -14,7 +14,7 @@ public class App
     public static void main(String[] args) {
         EmailController emailController = new EmailController();
 
-        List<Email> emails =emailController.emails(null,null,null);
+        List<Email> emails = emailController.emails(null,null,null);
         for (Email email : emails){
             EmailDAO emailDAO = new EmailDAO();
             MarkEmail markEmail = new MarkEmail();
@@ -26,12 +26,9 @@ public class App
             markEmail.wasRead(email.getUid());
 
         }
-        /*
-        emailController.sendEmail("davidsonifes@gmail.com", "Teste", "teste");
+
         EmailDAO emailDAO = new EmailDAO();
         EmailView.displayEmails(emailDAO.findAll());
-
-         */
 
     }
 }
