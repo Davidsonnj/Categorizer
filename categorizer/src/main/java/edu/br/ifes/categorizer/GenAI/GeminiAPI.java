@@ -8,7 +8,7 @@ public class GeminiAPI {
             .apiKey("GOOGLE_KEY")
             .build();
 
-    public String perguntar(String pergunta) throws Exception{
+    public static String perguntar(String pergunta) throws Exception{
         try {
             GenerateContentResponse response = client.models.generateContent(
                     "gemini-1.5-flash",
