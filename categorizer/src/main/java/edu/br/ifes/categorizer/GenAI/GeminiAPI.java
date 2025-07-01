@@ -5,7 +5,7 @@ import com.google.genai.types.GenerateContentResponse;
 
 public class GeminiAPI {
     private static final Client client = Client.builder()
-            .apiKey("GOOGLE_KEY")
+            .apiKey("AIzaSyDIElCTrrbKSzvsXKsctmls8B33vTXUTpM")
             .build();
 
     public static String perguntar(String pergunta) throws Exception{

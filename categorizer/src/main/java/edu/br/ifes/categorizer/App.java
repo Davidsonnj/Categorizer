@@ -6,29 +6,20 @@ import edu.br.ifes.categorizer.EmailAPI.Model.Email;
 import edu.br.ifes.categorizer.EmailAPI.Service.MarkEmail;
 import edu.br.ifes.categorizer.EmailAPI.View.EmailView;
 import edu.br.ifes.categorizer.GenAI.Perguntar;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class App 
-{
+
+@SpringBootApplication
+@EnableScheduling
+public class App {
+
     public static void main(String[] args) {
-        EmailController emailController = new EmailController();
-
-        List<Email> emails = emailController.emails(null,null,null);
-        for (Email email : emails){
-            EmailDAO emailDAO = new EmailDAO();
-            MarkEmail markEmail = new MarkEmail();
-            String status = Perguntar.getStatusEmail(email);
-
-            email.setStatus(status);
-
-            emailDAO.insert(email);
-            markEmail.wasRead(email.getUid());
-
-        }
-
-        EmailDAO emailDAO = new EmailDAO();
-        EmailView.displayEmails(emailDAO.findAll());
-
+        SpringApplication.run(App.class, args);
     }
 }

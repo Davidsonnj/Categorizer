@@ -1,0 +1,17 @@
+br/edu/ifes/mestrado/emailAPI/service/EmailSenderService.class
+edu/br/ifes/categorizer/Database/DAO/Interfaces/IEmailDAO.class
+edu/br/ifes/categorizer/GenAI/GeminiAPI.class
+edu/br/ifes/categorizer/EmailAPI/Model/Email.class
+edu/br/ifes/categorizer/GenAI/Perguntar.class
+edu/br/ifes/categorizer/EmailAPI/Model/EmailLogin.class
+br/edu/ifes/mestrado/emailAPI/service/EmailSenderService$2.class
+edu/br/ifes/categorizer/EmailAPI/Controller/EmailController.class
+br/edu/ifes/mestrado/emailAPI/service/EmailSenderService$1.class
+edu/br/ifes/categorizer/Database/DAO/Implementations/EmailDAO.class
+edu/br/ifes/categorizer/Database/DatabaseConnection.class
+edu/br/ifes/categorizer/EmailAPI/View/EmailView.class
+edu/br/ifes/categorizer/EmailAPI/Service/EmailSessionFactory.class
+edu/br/ifes/categorizer/EmailScheduler.class
+edu/br/ifes/categorizer/App.class
+edu/br/ifes/categorizer/EmailAPI/Service/MarkEmail.class
+edu/br/ifes/categorizer/EmailAPI/Service/EmailService.class
