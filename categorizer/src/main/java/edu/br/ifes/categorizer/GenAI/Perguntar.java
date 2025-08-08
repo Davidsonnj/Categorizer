@@ -35,8 +35,10 @@ public class Perguntar {
             - Data da defesa
             - Hora da defesa
             - Local da defesa
+            - Nome do co-orientador (Opcional)
+            - Email do co-orientador (Opcional)
             - Lista da banca examinadora: Deve conter pelo menos um membro com NOME (um primeiro nome é suficiente) e E-MAIL.
-        * Se TODAS essas informações estiverem presentes, o status é **`DADOS_INICIAIS`**. Ignore o assunto completamente neste caso.
+        * Se TODAS essas informações estiverem presentes (exceto as informações do co-orientador, pois ẽ opcional), o status é **`DADOS_INICIAIS`**. Ignore o assunto completamente neste caso.
 
     2.  **Verificação de DOCUMENTO_DISSERTACAO:**
         * Se a Regra 1 não for satisfeita, analise os anexos.
@@ -47,7 +49,7 @@ public class Perguntar {
         * Se 'Defesa' estiver no assunto E a verificação da Regra 1 falhou, o status é **`DADOS_INICIAIS_INCORRETOS`**.
 
     4.  **Outras Regras (se nenhuma das anteriores se aplicar):**
-        * **`CONFIRMACAO_DEFESA`**: O corpo do e-mail indica uma confirmação ("confirmo presença", "estarei lá") ou negação ("não poderei participar") sobre uma defesa já agendada.
+        * **`CONFIRMACAO_DEFESA`**: O corpo do e-mail indica uma confirmação (ex: "confirmo presença", "estarei lá") ou negação (ex: "não poderei participar", "Não comparecerei", "Não participarei") sobre uma defesa já agendada.
         * **`ANUENCIA_COORDENACAO`**: O corpo do e-mail contém uma aprovação explícita da coordenação ("autorizo", "aprovado", "de acordo", "ciência da coordenação").
         * **`DEFESA_CONCLUIDA`**: O corpo do e-mail anexa ou menciona o resultado final, como "ata de defesa", "resultado da defesa", "aluno aprovado" ou "aluno reprovado".
         * **`INDEFINIDO`**: Se o conteúdo não se encaixar claramente em nenhuma categoria acima.
