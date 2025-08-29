@@ -23,6 +23,13 @@ public class EmailScheduler {
         System.out.println("Processing emails...");
         List<Email> emails = emailController.emails(null, null, null);
         for (Email email : emails) {
+
+            String sender = email.getSender().toLowerCase();
+            if (sender.contains("mailer-daemon") || sender.contains("postmaster")) {
+                markEmail.wasRead(email.getUid());
+                continue;
+            }
+
             String status = Perguntar.getStatusEmail(email);
             email.setStatus(status);
             System.out.println(status);
