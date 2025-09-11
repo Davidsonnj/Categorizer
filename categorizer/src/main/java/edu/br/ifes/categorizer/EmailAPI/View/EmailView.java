@@ -23,9 +23,9 @@ public class EmailView {
 
     public static void displaySendEmailStatus(boolean success) {
         if (success) {
-            System.out.println("✅ E-mail enviado com sucesso!");
+            System.out.println("E-mail enviado com sucesso!");
         } else {
-            System.out.println("❌ Falha ao enviar o e-mail.");
+            System.out.println("Falha ao enviar o e-mail.");
         }
     }
 }

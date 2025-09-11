@@ -10,7 +10,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class EmailService {
     private String host;
@@ -23,8 +25,12 @@ public class EmailService {
         this.password = password;
     }
 
+    /**
+     * Busca e-mails não lidos e aplica filtros opcionais (assunto, corpo, remetente).
+     */
     public List<Email> fetchEmails(String subjectFilter, String bodyFilter, String senderFilter) {
         List<Email> emails = new ArrayList<>();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
         try {
             Session session = EmailSessionFactory.createSession(host);
@@ -45,15 +51,23 @@ public class EmailService {
                 String body = limparHtml(getTextFromMessage(message));
                 long uid = uidFolder.getUID(message);
 
-                // Aplicando os filtros
-                boolean matchesSubject = (subjectFilter == null || subject.toLowerCase().equalsIgnoreCase(subjectFilter.toLowerCase()));
-                boolean matchesBody = (bodyFilter == null || body.toLowerCase().contains(bodyFilter.toLowerCase()));
-                boolean matchesSender = (senderFilter == null || sender.toLowerCase().contains(senderFilter.toLowerCase()));
+                // Aplicando filtros
+                boolean matchesSubject =
+                        (subjectFilter == null || subject.equalsIgnoreCase(subjectFilter));
+                boolean matchesBody =
+                        (bodyFilter == null || body.toLowerCase().contains(bodyFilter.toLowerCase()));
+                boolean matchesSender =
+                        (senderFilter == null || sender.toLowerCase().contains(senderFilter.toLowerCase()));
 
                 if (matchesSubject && matchesBody && matchesSender) {
                     List<String> attachmentPaths = new ArrayList<>();
-                    if (message.getContent() instanceof MimeMultipart) {
-                        attachmentPaths = extractAttachments((MimeMultipart) message.getContent());
+
+                    if (message.isMimeType("multipart/*")) {
+                        Multipart multipart = (Multipart) message.getContent();
+
+                        // Baixa anexos em thread separada para não travar o loop
+                        Future<List<String>> future = executor.submit(() -> extractAttachments(multipart, executor));
+                        attachmentPaths = future.get(); // espera o download do anexo
                     }
 
                     emails.add(new Email(uid, subject, sender, message.getSentDate(), body, attachmentPaths));
@@ -69,8 +83,9 @@ public class EmailService {
         return emails;
     }
 
-
-
+    /**
+     * Extrai corpo do e-mail em texto simples.
+     */
     private String getTextFromMessage(Message message) throws Exception {
         if (message.isMimeType("text/plain")) {
             return (String) message.getContent();
@@ -81,7 +96,6 @@ public class EmailService {
         }
         return "";
     }
-
 
     private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws Exception {
         for (int i = 0; i < mimeMultipart.getCount(); i++) {
@@ -98,6 +112,9 @@ public class EmailService {
         return "";
     }
 
+    /**
+     * Garante que o arquivo salvo não sobrescreva outro existente.
+     */
     private String getAvailableFileName(String directory, String originalName) {
         File file = new File(directory + originalName);
 
@@ -125,50 +142,48 @@ public class EmailService {
         }
     }
 
-
-    private List<String> extractAttachments(MimeMultipart multipart) throws Exception {
+    /**
+     * Extrai e salva anexos dos e-mails.
+     */
+    private List<String> extractAttachments(Multipart multipart, ExecutorService executor) throws Exception {
         String outputDir = "/home/davidson/Desktop/Defesa-Mestrado-BPMN/Defesa-Mestrado-Camunda/anexos/";
-        List<String> savedFiles = new ArrayList<>();
+        List<Future<String>> futures = new ArrayList<>();
 
         for (int i = 0; i < multipart.getCount(); i++) {
             BodyPart part = multipart.getBodyPart(i);
 
             if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) && part.getFileName() != null) {
                 String originalFileName = part.getFileName();
-                String fileName = getAvailableFileName(outputDir, originalFileName);
-
-                File file = new File(outputDir + fileName);
-                file.getParentFile().mkdirs();
-
-                try (InputStream is = part.getInputStream();
-                     FileOutputStream fos = new FileOutputStream(file)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = is.read(buffer)) != -1) {
-                        fos.write(buffer, 0, bytesRead);
-                    }
-                    savedFiles.add(file.getAbsolutePath());
-                    System.out.println("✅ Anexo salvo: " + file.getAbsolutePath());
-                }
+                futures.add(executor.submit(() -> downloadAttachment(part, outputDir, originalFileName)));
             }
 
-            // Se multipart aninhado
-            if (part.getContent() instanceof MimeMultipart) {
-                savedFiles.addAll(extractAttachments((MimeMultipart) part.getContent()));
+            if (part.getContent() instanceof Multipart) {
+                futures.addAll(extractAttachments((Multipart) part.getContent(), executor)
+                        .stream()
+                        .map(path -> executor.submit(() -> path)) // transformar em Future
+                        .toList());
             }
+        }
+
+        // Espera todos terminarem e junta os caminhos
+        List<String> savedFiles = new ArrayList<>();
+        for (Future<String> f : futures) {
+            savedFiles.add(f.get());
         }
 
         return savedFiles;
     }
 
-
+    /**
+     * Remove tags e entidades HTML.
+     */
     public static String limparHtml(String html) {
         if (html == null) return "";
 
         // Remove tags HTML
         String texto = html.replaceAll("<[^>]+>", "");
 
-        // Converte entidades HTML (ex: &#39; → ')
+        // Converte entidades HTML
         texto = texto.replaceAll("&#39;", "'")
                 .replaceAll("&quot;", "\"")
                 .replaceAll("&amp;", "&")
@@ -177,9 +192,39 @@ public class EmailService {
                 .replaceAll("&nbsp;", " ");
 
         // Remove espaços duplicados e quebra de linha
-        texto = texto.replaceAll("\\s+", " ").trim();
+        return texto.replaceAll("\\s+", " ").trim();
+    }
 
-        return texto;
+    private String downloadAttachment(BodyPart part, String outputDir, String originalFileName) throws Exception {
+        String fileName = getAvailableFileName(outputDir, originalFileName);
+        File file = new File(outputDir + fileName);
+        file.getParentFile().mkdirs();
+
+        try (InputStream is = part.getInputStream();
+             FileOutputStream fos = new FileOutputStream(file)) {
+
+            byte[] buffer = new byte[4 * 1024 * 1024];  // 4 MB
+            int bytesRead;
+            long total = 0;
+
+            long start = System.currentTimeMillis();
+
+            while ((bytesRead = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+                total += bytesRead;
+
+                // imprime progresso em MB
+                long elapsed = (System.currentTimeMillis() - start) / 1000 + 1; // segundos
+                double speed = (total / 1024.0 / 1024.0) / elapsed; // MB/s
+
+                System.out.print("\rBaixando " + file.getName() + ": "
+                        + (total / (1024 * 1024)) + " MB ("
+                        + String.format("%.2f", speed) + " MB/s)");
+            }
+        }
+
+        System.out.println("\nDownload concluído: " + file.getName());
+        return file.getAbsolutePath();
     }
 
 

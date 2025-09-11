@@ -36,6 +36,7 @@ public class EmailDAO implements IEmailDAO {
 
         }catch (SQLException e){
             System.out.println("Erro ao inserir dados do email com UID: " + email.getUid());
+            e.printStackTrace();
         }
     }
     @Override
