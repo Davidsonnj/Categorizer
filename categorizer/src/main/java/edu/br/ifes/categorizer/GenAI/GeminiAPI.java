@@ -3,11 +3,31 @@ package edu.br.ifes.categorizer.GenAI;
 import com.google.genai.Client;
 import com.google.genai.errors.ServerException;
 import com.google.genai.types.GenerateContentResponse;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class GeminiAPI {
-    private static final Client client = Client.builder()
-            .apiKey("AIzaSyBu_ZZ3dO_qPL-cBr83dnBGB3YJafHHYXw")
-            .build();
+    private static final Dotenv dotenv =
+            Dotenv.configure()
+                    .ignoreIfMissing()
+                    .load();
+
+    private static final String GEMINI_API_KEY =
+            dotenv.get("GEMINI_API_KEY");
+
+    static {
+
+        if (GEMINI_API_KEY == null || GEMINI_API_KEY.isBlank()) {
+
+            throw new RuntimeException(
+                    "GEMINI_API_KEY não encontrada no .env"
+            );
+        }
+    }
+
+    private static final Client client =
+            Client.builder()
+                    .apiKey(GEMINI_API_KEY)
+                    .build();
 
     public static String perguntar(String pergunta) throws Exception {
         int retries = 0;
@@ -17,7 +37,7 @@ public class GeminiAPI {
         while (true) {
             try {
                 GenerateContentResponse response = client.models.generateContent(
-                        "gemini-1.5-flash",
+                        "gemini-flash-latest",
                         pergunta,
                         null
                 );

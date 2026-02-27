@@ -1,16 +1,16 @@
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DatabaseConnection.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/Perguntar.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/MainTest.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DAO/Interfaces/IEmailDAO.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailScheduler.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailSenderService.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Model/Email.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/MarkEmail.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DAO/Implementations/EmailDAO.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/View/EmailView.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Model/EmailLogin.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailService.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailSessionFactory.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Controller/EmailController.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/App.java
-/home/davidson/Desktop/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/GeminiAPI.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailService.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailSessionFactory.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/MainTest.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/MarkEmail.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Controller/EmailController.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/GeminiAPI.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DAO/Interfaces/IEmailDAO.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DatabaseConnection.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/GenAI/Perguntar.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Model/Email.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/View/EmailView.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/App.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/Database/DAO/Implementations/EmailDAO.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailScheduler.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Service/EmailSenderService.java
+/home/davidson/Desktop/Teste Camunda/Categorizer/categorizer/src/main/java/edu/br/ifes/categorizer/EmailAPI/Model/EmailLogin.java

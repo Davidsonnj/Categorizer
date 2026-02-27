@@ -1,3 +1,4 @@
+edu/br/ifes/categorizer/GenAI/MainTest.class
 br/edu/ifes/mestrado/emailAPI/service/EmailSenderService.class
 edu/br/ifes/categorizer/Database/DAO/Interfaces/IEmailDAO.class
 edu/br/ifes/categorizer/GenAI/GeminiAPI.class
